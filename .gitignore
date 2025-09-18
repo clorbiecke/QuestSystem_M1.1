@@ -100,6 +100,6 @@ InitTestScene*.unity*
 
 # Ignore assets and packages (make sure to import to new projects)
 [Aa]ssets/*
-![Aa]ssets/[S]cripts/
-![Aa]ssets/[S]cripts/**
+![Aa]ssets/[Ss]cripts/
+!/[Aa]ssets/[Ss]cripts/**
 
