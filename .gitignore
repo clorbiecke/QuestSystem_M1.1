@@ -97,3 +97,9 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+
+# Ignore assets and packages (make sure to import to new projects)
+[Aa]ssets/*
+![Aa]ssets/[S]cripts/
+![Aa]ssets/[S]cripts/**
+
