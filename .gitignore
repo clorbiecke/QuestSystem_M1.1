@@ -102,4 +102,6 @@ InitTestScene*.unity*
 [Aa]ssets/*
 ![Aa]ssets/[Ss]cripts/
 !/[Aa]ssets/[Ss]cripts/**
+![Aa]ssets/[Pp]refabs/
+!/[Aa]ssets/[Pp]refabs/**
 
