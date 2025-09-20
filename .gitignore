@@ -99,9 +99,9 @@ InitTestScene*.unity*
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
 
 # Ignore assets and packages (make sure to import to new projects)
-[Aa]ssets/*
-![Aa]ssets/[Ss]cripts/
-!/[Aa]ssets/[Ss]cripts/**
-![Aa]ssets/[Pp]refabs/
-!/[Aa]ssets/[Pp]refabs/**
+# [Aa]ssets/*
+# ![Aa]ssets/[Ss]cripts/
+# !/[Aa]ssets/[Ss]cripts/**
+# ![Aa]ssets/[Pp]refabs/
+# !/[Aa]ssets/[Pp]refabs/**
 
