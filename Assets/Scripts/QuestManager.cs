@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class QuestManager : MonoBehaviour
 {
-    private static QuestManager instance = null;
+    private static QuestManager instance;
 
     private Dictionary<string, bool> quests = new ();
     public static QuestManager Instance
@@ -14,7 +14,8 @@ public class QuestManager : MonoBehaviour
     {
         if (instance == null)
         {
-            instance = new QuestManager();
+            instance = this;
+            Debug.Log($"QuestManager instance created:\n\t{instance}");
         }
         else
         {
@@ -22,19 +23,6 @@ public class QuestManager : MonoBehaviour
                 $"The instance on {gameObject.name} will not work.");
         }
     }
-
-    /*/ Start is called once before the first execution of Update after the MonoBehaviour is created
-    //void Start()
-    //{
-        
-    //}
-
-    //// Update is called once per frame
-    //void Update()
-    //{
-        
-    //}
-    */
 
 
     /* UNIQUE METHODS */

@@ -20,19 +20,40 @@ public class CollideTrigger : MonoBehaviour, IQuestTrigger
 
     void Awake()
     {
-        //OnTriggered.AddListener(QuestManager.Instance.ON)
-        QuestManager.Instance.SubscribeToTrigger(this);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        QuestManager manager = QuestManager.Instance;
+        Debug.Log(manager);
+        if (manager != null)
+        {
+            QuestManager.Instance.SubscribeToTrigger(this);
+        }
+        else
+        {
+            Debug.LogError("No QuestManager instance exists to subscribe to this trigger.");
+        }
+
     }
 
-    private void OnCollisionEnter(Collision collision)
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    //Debug.Log($"{collision.gameObject.name} triggered {gameObject.name}.");
+
+    //    if (!sent && collision.gameObject.tag.ToLower().Equals("player"))
+    //    {
+    //        Debug.Log($"CollideTrigger (ID: {questID}) collided with player. Invoking TriggerEvent.");
+    //        OnTriggered.Invoke(questID);
+    //    }
+    //}
+
+    private void OnTriggerEnter(UnityEngine.Collider other)
     {
-        if (!sent && collision.gameObject.tag.ToLower().Equals("player"))
+        //Debug.Log($"{other.gameObject.name} triggered {gameObject.name}.");
+
+        if (!sent && other.gameObject.tag.Equals("Interactor"))
         {
             Debug.Log($"CollideTrigger (ID: {questID}) collided with player. Invoking TriggerEvent.");
             OnTriggered.Invoke(questID);
