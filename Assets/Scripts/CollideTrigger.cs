@@ -26,10 +26,14 @@ public class CollideTrigger : MonoBehaviour, IQuestTrigger
     void Start()
     {
         QuestManager manager = QuestManager.Instance;
-        Debug.Log(manager);
+        //Debug.Log(manager);
         if (manager != null)
         {
-            QuestManager.Instance.SubscribeToTrigger(this);
+            QuestManager.Instance.AddQuest(questID, this);
+            //if (!QuestManager.Instance.AddQuest(questID, this))
+            //{
+            //    Debug.LogError($"Could not add questID {questID} to QuestManager.quests");
+            //}
         }
         else
         {
@@ -38,16 +42,6 @@ public class CollideTrigger : MonoBehaviour, IQuestTrigger
 
     }
 
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    //Debug.Log($"{collision.gameObject.name} triggered {gameObject.name}.");
-
-    //    if (!sent && collision.gameObject.tag.ToLower().Equals("player"))
-    //    {
-    //        Debug.Log($"CollideTrigger (ID: {questID}) collided with player. Invoking TriggerEvent.");
-    //        OnTriggered.Invoke(questID);
-    //    }
-    //}
 
     private void OnTriggerEnter(UnityEngine.Collider other)
     {
