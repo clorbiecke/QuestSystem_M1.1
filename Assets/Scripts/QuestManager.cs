@@ -25,8 +25,6 @@ public class QuestManager : MonoBehaviour
     }
 
 
-    /* UNIQUE METHODS */
-
 
     // Add new quest to quest manager. Returns true if successful, otherwise returns false.
     public bool AddQuest(string questID, IQuestTrigger questTrigger)

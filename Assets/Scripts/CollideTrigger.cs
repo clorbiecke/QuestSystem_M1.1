@@ -13,13 +13,12 @@ public class CollideTrigger : MonoBehaviour, IQuestTrigger
     [SerializeField]
     private string questID = "No ID Set";
 
-   
     private bool sent = false;
 
 
-
-    void Awake()
+    void Awake() 
     {
+    
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -30,10 +29,6 @@ public class CollideTrigger : MonoBehaviour, IQuestTrigger
         if (manager != null)
         {
             QuestManager.Instance.AddQuest(questID, this);
-            //if (!QuestManager.Instance.AddQuest(questID, this))
-            //{
-            //    Debug.LogError($"Could not add questID {questID} to QuestManager.quests");
-            //}
         }
         else
         {
@@ -51,6 +46,7 @@ public class CollideTrigger : MonoBehaviour, IQuestTrigger
         {
             Debug.Log($"CollideTrigger (ID: {questID}) collided with player. Invoking TriggerEvent.");
             OnTriggered.Invoke(questID);
+            sent = true;
         }
     }
 
