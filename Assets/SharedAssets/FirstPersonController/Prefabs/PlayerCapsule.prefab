@@ -157,8 +157,8 @@ GameObject:
   - component: {fileID: 8901987648488415930}
   - component: {fileID: 9004248387679191760}
   m_Layer: 0
-  m_Name: Interactor
-  m_TagString: Interactor
+  m_Name: PlayerHands
+  m_TagString: PlayerHands
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

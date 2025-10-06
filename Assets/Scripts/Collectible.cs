@@ -1,15 +1,15 @@
 using UnityEngine;
 
-[RequireComponent (typeof(CollideTrigger))]
+[RequireComponent (typeof(QuestCollideTrigger))]
 public class Collectible : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        gameObject.GetComponent<CollideTrigger>().OnTriggered.AddListener(OnCollected);
+        gameObject.GetComponent<QuestCollideTrigger>().QuestTriggerEvent.AddListener(OnCollected);
     }
 
-    private void OnCollected(string questID)
+    private void OnCollected(string questID, int questTriggerStep, bool jumpToEnd)
     {
         gameObject.SetActive(false);
     }

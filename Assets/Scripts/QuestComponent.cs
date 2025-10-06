@@ -13,8 +13,7 @@ public class QuestComponent : MonoBehaviour
         QuestManager manager = QuestManager.Instance;
         if (manager != null )
         {
-            // TODO: add quest data object to manager
-
+            manager.RegisterQuest(quest.GetID(), quest);
             quest.ResetQuest();
         }
         else

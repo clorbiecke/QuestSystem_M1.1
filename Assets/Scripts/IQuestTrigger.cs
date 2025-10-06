@@ -3,6 +3,6 @@ using UnityEngine.Events;
 
 public interface IQuestTrigger
 {
-    public UnityEvent<string> OnTriggered { get; }
+    public UnityEvent<string, int, bool> QuestTriggerEvent { get; }
 
 }

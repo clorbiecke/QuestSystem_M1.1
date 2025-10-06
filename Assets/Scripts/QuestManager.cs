@@ -1,15 +1,19 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class QuestManager : MonoBehaviour
 {
+    //TODO: create class for QuestID? ensure that ids are unique?
     private static QuestManager instance;
 
-    private Dictionary<string, bool> quests = new ();
-    public static QuestManager Instance
-    {
-        get => instance;
-    }
+    private Dictionary<string, QuestData> quests = new ();
+
+    private UnityEvent<string> QuestStarted;
+    private UnityEvent<string> QuestUpdated;
+    private UnityEvent<string> QuestComplete;
+    
+    
     private void Awake()
     {
         if (instance == null)
@@ -24,96 +28,136 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-
-
-    // Add new quest to quest manager. Returns true if successful, otherwise returns false.
-    public bool AddQuest(string questID, IQuestTrigger questTrigger)
+    public static QuestManager Instance
     {
-        if (quests.TryAdd(questID, false))
+        get => instance;
+    }
+
+    public UnityEvent<string> GetQuestStartedEvent()
+    {
+        return QuestStarted;
+    }
+
+    public UnityEvent<string> GetQuestUpdatedEvent()
+    {
+        return QuestUpdated;
+    }
+
+    public UnityEvent<string> GetQuestCompleteEvent()
+    {
+        return QuestComplete;
+    }
+
+    // Add quest to dictionary, if questID is unique
+    public void RegisterQuest(string questID, QuestData data)
+    {
+        if (quests.TryAdd(questID, data))
         {
             Debug.Log($"Quest \'{questID}\' added to quest manager");
-            questTrigger.OnTriggered.AddListener(OnQuestCompleted);
-            return true;
         }
         else
         {
             Debug.LogError($"Quest (questID: {questID}) could not be added to quest manager on {gameObject.name}.");
-            return false;
         }
     }
 
-    // Get quest information by questID
-    public bool GetQuestInfo(string questID)
+    // Get quest data by questID
+    public QuestData GetQuest(string questID)
     {
-        bool info;
+        QuestData data = null;
 
-        if (quests.TryGetValue(questID, out info))
+        if (!quests.TryGetValue(questID, out data))
         {
-            return info;
+            Debug.LogError($"Could not get data for Quest ID ({questID}) in QuestManager of {gameObject.name}.");
         }
-        else
-        {
-            Debug.LogError($"Quest ID ({questID}) was not found in QuestManager of {gameObject.name}.");
-            return false;
-        }
+        
+        return data;
     }
 
-    // Called when a quest is completed
-    protected void OnQuestCompleted(string questID)
+    // Add QuestManager as an observer to given IQuestTrigger's event
+    public void ObserveTrigger(IQuestTrigger trigger)
     {
-        try
+        trigger.QuestTriggerEvent.AddListener(OnQuestTrigger);
+    }
+
+
+    protected void OnQuestTrigger(string questID, int step, bool jumpToEnd)
+    {
+        QuestData questData = null;
+        if (!quests.TryGetValue(questID, out questData))
         {
-            quests[questID] = true;
-            Debug.Log($"Quest \'{questID}\' complete!" +
-                $"\nProgress: {GetCompletedQuestCount()}/{GetQuestCount()} quests completed.");
-            if (AllQuestsCompleted())
+            Debug.LogWarning($"Could not get data for questID {questID}");
+            return;
+        }
+
+        if (!jumpToEnd)
+        {
+            if ((!questData.IsStarted && step == 0) || (!questData.IsComplete && questData.GetCurrentStep() == step - 1))
             {
-                OnAllQuestsComplete();
+                questData.NextStep(false);
+                if (step == 0) { QuestStarted.Invoke(questID); }
+                QuestUpdated.Invoke(questID);
+                if (questData.IsComplete) { QuestComplete.Invoke(questID); }
             }
         }
-        catch (KeyNotFoundException) { }
-    }
-
-    // Subscribe
-    public void SubscribeToTrigger(IQuestTrigger trigger)
-    {
-        trigger.OnTriggered.AddListener(this.OnQuestCompleted);
-    }
-
-    private bool AllQuestsCompleted()
-    {
-        foreach (string questID in quests.Keys)
+        else if (questData.IsStarted)
         {
-            if (quests[questID] == false)
-            {
-                return false;
-            }
+            questData.NextStep(true);
         }
-        return true;
     }
 
-    private void OnAllQuestsComplete()
-    {
-        Debug.Log("YOU HAVE COMPLETED ALL OF THE QUESTS!!!");
-    }
 
-    public int GetQuestCount()
-    {
-        return quests.Count;
-    }
 
-    public int GetCompletedQuestCount()
-    {
-        int count = 0;
-        foreach (string questID in quests.Keys)
-        {
-            if (quests[questID] == true)
-            {
-                count++;
-            }
-        }
-        return count;
-    }
+    //// Called when a quest is completed
+    //protected void OnQuestCompleted(string questID)
+    //{
+    //    try
+    //    {
+    //        quests[questID] = true;
+    //        Debug.Log($"Quest \'{questID}\' complete!" +
+    //            $"\nProgress: {GetCompletedQuestCount()}/{GetQuestCount()} quests completed.");
+    //        if (AllQuestsCompleted())
+    //        {
+    //            OnAllQuestsComplete();
+    //        }
+    //    }
+    //    catch (KeyNotFoundException) { }
+    //}
+
+    //private bool AllQuestsCompleted()
+    //{
+    //    foreach (string questID in quests.Keys)
+    //    {
+    //        if (quests[questID] == false)
+    //        {
+    //            return false;
+    //        }
+    //    }
+    //    return true;
+    //}
+
+    //private void OnAllQuestsComplete()
+    //{
+    //    Debug.Log("YOU HAVE COMPLETED ALL OF THE QUESTS!!!");
+    //}
+
+    //public int GetQuestCount()
+    //{
+    //    return quests.Count;
+    //}
+
+    //public int GetCompletedQuestCount()
+    //{
+    //    int count = 0;
+    //    foreach (string questID in quests.Keys)
+    //    {
+    //        if (quests[questID] == true)
+    //        {
+    //            count++;
+    //        }
+    //    }
+    //    return count;
+    //}
 
 
 

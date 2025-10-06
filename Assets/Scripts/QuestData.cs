@@ -3,6 +3,9 @@ using UnityEngine;
 [System.Serializable]
 public class QuestData
 {
+    static readonly int START = 0;
+    static readonly int NOT_STARTED = -1;
+
     [SerializeField]
     [Tooltip("Quest ID")]
     private string id = "not set";
@@ -108,15 +111,17 @@ public class QuestData
     }
 
     // Returns true if currentStep is greater than or equal to 0, and false otherwise
-    public bool IsStarted()
+    public bool IsStarted//()
     {
-        return (currentStep >= 0);
+        get => (currentStep >= 0);
+        // return (currentStep >= 0);
     }
 
     // Returns true if currentStep is greater than or equal to the total number of steps
-    public bool IsComplete()
+    public bool IsComplete//()
     {
-        return (currentStep >= stepInstructions.Length);
+        get => (currentStep >= stepInstructions.Length);
+        //return (currentStep >= stepInstructions.Length);
     }
 
     // Returns a single line including all member variables
@@ -125,6 +130,16 @@ public class QuestData
         return $"{id}, {displayName}, {currentStep}, {stepInstructions}";
     }
 
+    // Starts the quest. Returns true if successful and false otherwise (ex. quest already started)
+    public bool StartQuest()
+    {
+        if (!IsStarted)
+        {
+            currentStep = START;
+            return true;
+        }
+        return false ;
+    }
 
 
 
