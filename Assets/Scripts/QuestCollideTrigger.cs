@@ -10,6 +10,11 @@ public class QuestCollideTrigger : MonoBehaviour, IQuestTrigger
     private UnityEvent<string, int, bool> _questTriggerEvent;
     public UnityEvent<string, int, bool> QuestTriggerEvent { get => _questTriggerEvent; }
 
+#if UNITY_EDITOR
+    //[SerializeField]
+    //[Tooltip("EDITOR ONLY: reference to a object with a quest trigger. Used to automatically set Quest ID to the questID of a QuestData object")]
+    //private GameObject QuestObjectReference;
+#endif
 
     [SerializeField]
     [Tooltip("Go to this step of the quest when triggered.")]
@@ -47,6 +52,26 @@ public class QuestCollideTrigger : MonoBehaviour, IQuestTrigger
 
     }
 
+#if UNITY_EDITOR
+    //private GameObject prevQuestObject = null;
+    //private string prevQuestID = "unknown";
+    //void OnValidate()
+    //{
+    //    if (prevQuestObject != QuestObjectReference)
+    //    {
+    //        QuestCollideTrigger trigger = QuestObjectReference.GetComponent<QuestCollideTrigger>();
+    //        questID = trigger.questID;
+    //        prevQuestObject = QuestObjectReference;
+    //    }
+    //    if (prevQuestID != questID)
+    //    {
+    //        QuestObjectReference = null;
+    //        prevQuestObject = null;
+    //        prevQuestID = questID;
+    //    }
+    //}
+
+#endif
 
     private bool CanTrigger()
     {
@@ -55,7 +80,7 @@ public class QuestCollideTrigger : MonoBehaviour, IQuestTrigger
 
         if (quest != null)
         {
-            if ((jumpToEnd && quest.IsStarted) || (quest.GetCurrentStep() == questTriggerStep -1))
+            if ((jumpToEnd && quest.IsStarted()) || (quest.GetCurrentStep() == questTriggerStep -1))
             {
                 return true;
             }

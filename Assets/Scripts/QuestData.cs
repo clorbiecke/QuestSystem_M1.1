@@ -1,8 +1,14 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class QuestData
+public class QuestData// : MonoBehaviour
 {
+//#if UNITY_EDITOR
+//    // Refrences to all QuestData objects
+//    public static Dictionary<QuestData, string> allQuests = new();
+//#endif
+
     static readonly int START = 0;
     static readonly int NOT_STARTED = -1;
 
@@ -14,12 +20,16 @@ public class QuestData
     [Tooltip("The quest name to display to players.")]
     private string displayName = "not set";
 
+
+
     [SerializeField]
     [Tooltip("An array of instructions, one for each step in the quest.")]
     private string[] stepInstructions = null;
 
+
     // Which step of the quest the player is on
-    private int currentStep = -1;
+    public int currentStep = -1;
+
 
 
     public QuestData(string id,  string displayName, string[] stepInstructions)
@@ -100,28 +110,30 @@ public class QuestData
     // Resets currentStep to -1, marking the quest as not started
     public void ResetQuest()
     {
+        Debug.Log($"Quest {id} reset.");
         currentStep = -1;
     }
 
     // Advances the quest to and returns the next step, or, if bool jumpToEnd is true, completes the quest
     public int NextStep(bool jumpToEnd = false)
     {
-        currentStep = (jumpToEnd) ? currentStep + 1 : stepInstructions.Length;
+        Debug.Log($"Called NextStep({jumpToEnd}) on quest {id}");
+        int prevStep = currentStep;
+        currentStep = (jumpToEnd) ? stepInstructions.Length : currentStep + 1;
+        Debug.Log($"Quest {id} progressed from step {prevStep} to step {currentStep}");
         return currentStep;
     }
 
     // Returns true if currentStep is greater than or equal to 0, and false otherwise
-    public bool IsStarted//()
+    public bool IsStarted()
     {
-        get => (currentStep >= 0);
-        // return (currentStep >= 0);
+        return (currentStep >= 0);
     }
 
     // Returns true if currentStep is greater than or equal to the total number of steps
-    public bool IsComplete//()
+    public bool IsComplete()
     {
-        get => (currentStep >= stepInstructions.Length);
-        //return (currentStep >= stepInstructions.Length);
+        return (currentStep >= stepInstructions.Length);
     }
 
     // Returns a single line including all member variables
@@ -133,7 +145,7 @@ public class QuestData
     // Starts the quest. Returns true if successful and false otherwise (ex. quest already started)
     public bool StartQuest()
     {
-        if (!IsStarted)
+        if (!IsStarted())
         {
             currentStep = START;
             return true;
