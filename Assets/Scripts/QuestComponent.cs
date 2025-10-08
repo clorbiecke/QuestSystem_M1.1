@@ -10,6 +10,11 @@ public class QuestComponent : MonoBehaviour
     [Tooltip("QuestData object that describes a quest.")]
     private QuestData quest = null;
 
+    public ref QuestData ReadOnlyQuestData() 
+    {
+        return ref quest;
+    }
+
 //#if UNITY_EDITOR
 //    // Refrences to all QuestData objects
 //    public static Dictionary<QuestComponent, string> allQuests = new();

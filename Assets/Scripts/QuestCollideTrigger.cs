@@ -53,6 +53,19 @@ public class QuestCollideTrigger : MonoBehaviour, IQuestTrigger
     }
 
 #if UNITY_EDITOR
+    [HideInInspector]
+    public int selectedQuestIndex = 0;
+    [HideInInspector]
+    public string QuestID
+    {
+        get => questID; set => questID = value;
+    }
+    //private void OnValidate()
+    //{
+    //    if (QuestTriggerEdi)
+    //}
+    //[HideInInspector]
+    //public bool
     //private GameObject prevQuestObject = null;
     //private string prevQuestID = "unknown";
     //void OnValidate()
